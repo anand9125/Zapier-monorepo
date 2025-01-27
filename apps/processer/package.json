@@ -1,0 +1,17 @@
+{
+  "name": "processer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "tsc -b && node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "js": "^0.1.0",
+    "kafka": "^0.2.3",
+    "kafkajs": "^2.2.4"
+  }
+}
