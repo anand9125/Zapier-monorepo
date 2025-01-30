@@ -1,16 +1,14 @@
 import {Router} from  "express"
 import { authMiddleware } from "../Middlewares/middlewares";
+import { createZap, getZapById } from "../controller/zap";
+import { getAllZap } from "../controller/zap";
 const router = Router();
 
-router.post("/", (req, res) => {
-   console.log("create a zap")
-})
 
-router.get("/",authMiddleware, (req, res) => {
-   console.log("get all zap")
-})
-router.get("/:zapId",authMiddleware, (req, res) => {
-   console.log("if particular zap is opened give all the axtions and trigeers")
-})
+router.post("/",authMiddleware, createZap)
+
+router.get("/",authMiddleware, getAllZap)
+
+router.get("/:zapId",authMiddleware, getZapById)
 
 export  const zapRouter = router

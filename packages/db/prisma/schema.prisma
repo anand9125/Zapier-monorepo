@@ -14,18 +14,21 @@ datasource db {
 }
 
   model User {
-    id         String  @id @default(uuid())
+    id         Int  @id @default(autoincrement())
     email      String  @unique
     name       String
     password   String
+    zaps       Zap[]
   }
 
   model Zap{
     id            String @id @default(uuid())
     triggerId     String    // A foreign key that connects a Zap to a Trigger.
+    userId         Int
     trigger       Trigger?   //Zap connects to one Trigger through the triggerId (one-to-one) every zap has one trigger
     actions       Action[]   //one to many relation with actions
     zapRuns       ZapRun[] 
+    user          User @relation(fields: [userId],references: [id]) 
   }
 
   model Trigger{
