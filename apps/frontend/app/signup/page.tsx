@@ -3,7 +3,17 @@ import {CheakFeatures} from "../components/CkeackFeaturs"
 import { Appbar } from "../components/Appbar"
 import { Input } from "../components/Input"
 import {PrimayButton} from "../components/buttons/PrimaryButton"
+import { useState } from "react"
+import { BACKEND_URL } from "../config"
+import axios from "axios"
+import { useRouter } from "next/navigation"
 export default function (){
+    const router = useRouter()
+    const[name,setName]= useState("")
+    const [password,setPassword] = useState("")
+    const [email,setEmail] = useState("")
+
+
     return <div>
         <Appbar></Appbar>
         <div className="flex justify-center">
@@ -22,17 +32,25 @@ export default function (){
             <CheakFeatures label={"14-days trail of premium features & apps"}></CheakFeatures>
            </div>
             <div className="flex-1 pt-6  pb-12 px-4 mt-6 border rounded">
-               <Input  label={"Name"} type="text" placeholder="Your name" onChange={()=>{
-
+               <Input  label={"Name"} type="text" placeholder="Your name" onChange={(e)=>{
+                setName(e.target.value)
              }} />
-               <Input label={"Email"} type="text" placeholder="Your Email" onChange={()=>{
-
+               <Input label={"Email"} type="text" placeholder="Your Email" onChange={(e)=>{
+                setEmail(e.target.value)
             }} />
-            <Input  label={"Password"} type="text" placeholder="Password"  onChange={()=>{
-
+            <Input  label={"Password"} type="text" placeholder="Password"  onChange={(e)=>{
+                setPassword(e.target.value)
             }}/>
             <div className="pt-5">
-            <PrimayButton size="big" onClick={()=>{}}>Get started free</PrimayButton>
+            <PrimayButton size="big" onClick={async()=>{
+              const res=   await axios.post(`${BACKEND_URL}/api/v1/user/signup`,{
+                    name,
+                    email,
+                    password
+                 });
+                 console.log(res)
+                router.push("/login")
+            }}>Get started free</PrimayButton>
             </div>
              
          </div>

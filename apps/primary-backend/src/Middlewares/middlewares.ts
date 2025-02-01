@@ -8,7 +8,7 @@ interface AuthenticatedRequest extends Request {
 
 export function authMiddleware(req: AuthenticatedRequest, res: Response, next: NextFunction): void {
   const token = req.headers.authorization;
-
+   console.log(token)
   if (!token) {
     res.status(401).json({ message: "Token required" });
     return; 
@@ -16,8 +16,9 @@ export function authMiddleware(req: AuthenticatedRequest, res: Response, next: N
 
   try {
     
-    const payload = jwt.verify(token, JWT_PASSWORD) as { id: string }; 
-    req.id = payload.id; 
+    const payload = jwt.verify(token, JWT_PASSWORD) as { userId: string }; 
+   
+   req.id = payload.userId 
     next(); 
   } catch (error) {
     res.status(401).json({ message: "Invalid token" });

@@ -7,6 +7,7 @@ import { SigninScheme, SigupScheme } from "../types";
 const client = new PrismaClient()
 
 export const userSignUp = async(req:Request,res:Response)=>{
+    
     const parseData = SigupScheme.safeParse(req.body)       
     if(!parseData.success){
          res.status(401).json({
@@ -14,15 +15,19 @@ export const userSignUp = async(req:Request,res:Response)=>{
         })
         return;
     }
+    
     const hashPassword = await bcrypt.hash(parseData.data.password,10)
+    
     try{
-        const existingUser = await client.user.findUnique({
+        
+        const existingUser = await client.user.findFirst({
              where: { email:parseData.data.email } 
         });
         if (existingUser) {
             res.status(409).json({ message: "User already exists" })
             return;
         }
+     
         const user = await client.user.create({
             data: {
                 name: parseData.data.name,
@@ -30,14 +35,15 @@ export const userSignUp = async(req:Request,res:Response)=>{
                 password:  hashPassword,
             },
         })
-        const token = jwt.sign({userId :user.id},JWT_PASSWORD)
+      
         res.status(201).json({
             user,
-            token
+           
         })
     }   catch(e){
+        console.log("erre")
         res.status(500).json({
-           mesage:"Internal Server Error"
+           message:"Internal Server Error"
         })
      }
 

@@ -35,6 +35,7 @@ datasource db {
     id                  String @id @default(uuid())
     zapId               String @unique
     availableTriggersId   String  //A foreign key connecting this Trigger to AvailableTriggers.
+    metadata    Json  @default("{}")
     type                AvailableTriggers @relation(fields: [availableTriggersId],references: [id])
     zaps                Zap     @relation(fields: [zapId], references: [id])
   }
@@ -42,6 +43,7 @@ datasource db {
   model AvailableTriggers{  //eveery trigger offer some certain type of avaialietrigger 
     id         String @id @default(uuid())
     name       String
+    image       String?
     triggers   Trigger[]  //A relation field connecting AvailableTriggers to multiple Trigger instances.
     //avaiable triggers on the zpaier page like calender github,...
   }
@@ -50,6 +52,7 @@ datasource db {
     id                  String @id @default(uuid())
     zapId               String
     zap                 Zap @relation(fields: [zapId], references: [id])
+   metadata        Json  @default("{}")
    AvailableActionId    String //A foreign key connecting
     type                AvailableAction @relation(fields: [AvailableActionId],references: [id])
     sortingOrder        Int   @default(0)
@@ -59,6 +62,7 @@ datasource db {
   model AvailableAction{
     id         String @id @default(uuid())
     name       String
+    image String?
     actions   Action[]  //A relation field connecting AvailableAction to multiple Action instances.
     //avaiable actions on the zpaier page like send email slack,...
   }

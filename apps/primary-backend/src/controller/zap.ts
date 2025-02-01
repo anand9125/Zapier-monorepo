@@ -7,9 +7,11 @@ const client = new PrismaClient();
 export const createZap = async (req: Request, res: Response) => {
     const body = req.body;
     //@ts-ignore
-    const id = req.id; //user id
+    const id = req.id; 
+    console.log(id)
     const parseData = ZapCreateScheme.safeParse(body);
 
+    console.log("have you reaced",id)
     if (!parseData.success) {
          res.status(400).json({ message: parseData.error });
         return;
@@ -19,19 +21,21 @@ export const createZap = async (req: Request, res: Response) => {
     try {
       const zapId=  await client.$transaction(async (tx) => {
             //why i have done like this just because one to one realtion prisma is not allowed to create ..
-            const zap = await tx.zap.create({
+           console.log("reached")
+            const zap = await client.zap.create({
                 data: {
-                    userId:id,
+                    userId:parseInt(id),
                     triggerId: "", 
                     actions: {
                         create: parseData.data.actions.map((x, index) => ({
                             AvailableActionId: x.AvailableActionId,
-                            sortingOrder: index
+                            sortingOrder: index,
+                            metadata: x.actionMetadata
                         }))
                     }
                 }
             });
-
+           console.log("reached 2")
             const trigger = await tx.trigger.create({
                 data: {
                     availableTriggersId: parseData.data.availableTriggersId,
