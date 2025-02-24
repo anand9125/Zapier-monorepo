@@ -39,7 +39,7 @@ export const createZap = async (req: Request, res: Response) => {
             const trigger = await tx.trigger.create({
                 data: {
                     availableTriggersId: parseData.data.availableTriggersId,
-                    zapId: zap.id
+                    zapId: zap.id 
                 }
             });
 
